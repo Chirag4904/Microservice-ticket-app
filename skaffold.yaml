@@ -1,0 +1,22 @@
+apiVersion: skaffold/v4beta1
+kind: Config
+
+build:
+  local:
+    push: false
+  artifacts:
+    - image: chirag4904/auth
+      context: ./auth
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+
+
+manifests:
+ rawYaml:
+ - ./infra/k8s/*
+deploy:
+ kubectl: {}
