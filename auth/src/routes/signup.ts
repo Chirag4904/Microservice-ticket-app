@@ -1,8 +1,10 @@
 import express, { Request, Response } from "express";
-import { body, validationResult } from "express-validator";
-import { RequestValidationError } from "../errors/request-validation-error";
+import { body } from "express-validator";
+import { validateRequest } from "../middlewares/validate-requests";
 import { BadRequestError } from "../errors/bad-request-error";
 import { User } from "../models/user.model";
+
+import jwt from "jsonwebtoken";
 
 const router = express.Router();
 
@@ -15,13 +17,8 @@ router.post(
 			.isLength({ min: 4, max: 20 })
 			.withMessage("Password must be between 4 and 20 characters"),
 	],
+	validateRequest,
 	async (req: Request, res: Response) => {
-		// error handling
-		const errors = validationResult(req);
-		// if there are errors then return the array of errors
-		if (!errors.isEmpty()) {
-			throw new RequestValidationError(errors.array());
-		}
 		//create a user as email and pass are validated
 		const { email, password } = req.body;
 
@@ -33,6 +30,20 @@ router.post(
 
 		const user = User.build({ email, password });
 		await user.save();
+
+		//generate jwt and store on session object
+
+		const userJwt = jwt.sign(
+			{
+				id: user.id,
+				email: user.email,
+			},
+			process.env.JWT_KEY!
+		);
+
+		req.session = {
+			jwt: userJwt,
+		};
 
 		res.status(201).send({ user });
 	}
