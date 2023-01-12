@@ -23,6 +23,15 @@ build:
           - src: '**/*.js'
             dest: .
 
+    - image: chirag4904/tickets
+      context: ./tickets
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+
 
 manifests:
  rawYaml:
