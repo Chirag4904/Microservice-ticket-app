@@ -6,6 +6,8 @@ import cookieSession from "cookie-session";
 import { errorHandler, NotFoundError, currentUser } from "@caticket/common";
 import { createTicketRouter } from "./routes/new.route";
 import { showTicketRouter } from "./routes/show.route";
+import { indexTicketRouter } from "./routes/index.route";
+import { updateTicketRouter } from "./routes/update.route";
 
 const app = express();
 app.set("trust proxy", true);
@@ -21,6 +23,8 @@ app.use(currentUser);
 
 app.use(createTicketRouter);
 app.use(showTicketRouter);
+app.use(indexTicketRouter);
+app.use(updateTicketRouter);
 app.all("*", async (req, res, next) => {
 	throw new NotFoundError();
 });
