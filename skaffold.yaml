@@ -32,6 +32,15 @@ build:
           - src: 'src/**/*.ts'
             dest: .
 
+    - image: chirag4904/orders
+      context: ./orders
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+
 
 manifests:
  rawYaml:
