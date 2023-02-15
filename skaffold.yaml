@@ -41,6 +41,24 @@ build:
           - src: 'src/**/*.ts'
             dest: .
 
+    - image: chirag4904/expiration
+      context: ./expiration
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+
+    - image: chirag4904/payments
+      context: ./payments
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+
 
 manifests:
  rawYaml:
